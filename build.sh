@@ -24,14 +24,19 @@ ARGS="--pull --force-rm"
 # Specify --no-cache unless caching is requested
 [ "$PLUGIN_USE_CACHE" == "true" -o "$PLUGIN_USE_CACHE" == 1 ] || ARGS="$ARGS --no-cache"
 
-echo "$PLUGIN_BUILD_ARGS" | tr ',' '\n' | \
 while read -r arg; do
     # If arg is '%file: <filename>' then .parse and read file
     if echo "$arg" | grep -q "%file\\s*:\\s*"; then
         arg="${arg%%=*}=$(cat "$(echo ${arg#*:} | xargs)")"
     fi
-    ARGS="$ARGS --build-arg $arg"
-done
+    if [ -n "${arg// }" ]; then
+        # Only add arguments if they're not empty
+        # this prevents the '"docker build" requires exactly 1 argument.' error
+        ARGS="$ARGS --build-arg $arg"
+    fi
+done << EOA
+$(echo "$PLUGIN_BUILD_ARGS" | tr ',' '\n')
+EOA
 
 export VCS_REF="$DRONE_COMMIT_SHA"
 export VCS_URL="$DRONE_REPO_LINK"
