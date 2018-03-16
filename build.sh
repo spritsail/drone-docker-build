@@ -24,7 +24,12 @@ ARGS="--pull --force-rm"
 # Specify --no-cache unless caching is requested
 [ "$PLUGIN_USE_CACHE" == "true" -o "$PLUGIN_USE_CACHE" == 1 ] || ARGS="$ARGS --no-cache"
 
-for arg in $(echo "$PLUGIN_BUILD_ARGS" | tr ',' ' '); do
+echo "$PLUGIN_BUILD_ARGS" | tr ',' '\n' | \
+while read -r arg; do
+    # If arg is '%file: <filename>' then .parse and read file
+    if echo "$arg" | grep -q "%file\\s*:\\s*"; then
+        arg="${arg%%=*}=$(cat "$(echo ${arg#*:} | xargs)")"
+    fi
     ARGS="$ARGS --build-arg $arg"
 done
 
