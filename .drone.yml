@@ -1,17 +1,14 @@
 pipeline:
   build:
-    image: docker #spritsail/docker-build
+    image: spritsail/docker-build
     volumes: [ '/var/run/docker.sock:/var/run/docker.sock' ]
-    #repo: spritsail/docker-build
-    environment:
-      - PLUGIN_REPO=spritsail/docker-build
-    commands:
-      - ./build.sh
+    repo: spritsail/docker-build
 
   publish:
     image: spritsail/docker-publish
+    when: { branch: [ master ], event: [ push, tag, deployment ] }
     volumes: [ '/var/run/docker.sock:/var/run/docker.sock' ]
-    secrets: [ docker_username, docker_password ]
+    secrets: [ docker_username, docker_password, microbadger_token ]
     repo: spritsail/docker-build
 
   notify:
