@@ -44,7 +44,7 @@ ARGS="$ARGS --build-arg VCS_BRANCH=$VCS_BRANCH"
 ARGS="$ARGS --build-arg BUILD_DATE=$BUILD_DATE"
 
 if [ -z "$PLUGIN_NO_LABELS" ]; then
-    ARGS="$ARGS --label org.label-schema.vcs-ref=$VCS_REF"
+    ARGS="$ARGS --label org.label-schema.vcs-ref=${VCS_REF:0:7}"
     ARGS="$ARGS --label org.label-schema.vcs-url=$VCS_URL"
     ARGS="$ARGS --label org.label-schema.vcs-branch=$VCS_BRANCH"
     ARGS="$ARGS --label org.label-schema.build-date=$BUILD_DATE"
