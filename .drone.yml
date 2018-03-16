@@ -1,0 +1,23 @@
+pipeline:
+  build:
+    image: docker #spritsail/docker-build
+    volumes: [ '/var/run/docker.sock:/var/run/docker.sock' ]
+    #repo: spritsail/docker-build
+    environment:
+      - PLUGIN_REPO=spritsail/docker-build
+    commands:
+      - ./build.sh
+
+  publish:
+    image: spritsail/docker-publish
+    volumes: [ '/var/run/docker.sock:/var/run/docker.sock' ]
+    secrets: [ docker_username, docker_password ]
+    repo: spritsail/docker-build
+
+  notify:
+    image: appleboy/drone-telegram
+    when: { status: [ success, failure ] }
+    secrets: [ telegram_token, telegram_to ]
+    message: |
+      *{{repo.owner}}/{{repo.name}} [{{commit.branch}}]*: Build #{{build.number}}: *{{uppercase build.status}}*
+      {{build.link}}

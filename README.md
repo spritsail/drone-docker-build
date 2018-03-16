@@ -1,0 +1,38 @@
+[hub]: https://hub.docker.com/r/spritsail/docker-build
+[git]: https://github.com/spritsail/drone-docker-build
+
+# [spritsail/docker-build][hub]
+[![](https://images.microbadger.com/badges/image/spritsail/docker-build.svg)](https://microbadger.com/images/spritsail/docker-build)
+[![](https://images.microbadger.com/badges/version/spritsail/docker-build.svg)][hub]
+[![](https://images.microbadger.com/badges/commit/spritsail/docker-build.svg)][git]
+[![Docker Stars](https://img.shields.io/docker/stars/spritsail/docker-build.svg)][hub]
+[![Docker Pulls](https://img.shields.io/docker/pulls/spritsail/docker-build.svg)][hub]
+[![Build Status](https://drone.spritsail.io/api/badges/spritsail/drone-docker-build/status.svg)](https://drone.spritsail.io/spritsail/docker-build)
+
+A plugin for [Drone CI](https://github.com/drone/drone) to build and label Docker images with minimal effort
+
+## Supported tags and respective `Dockerfile` links
+
+`latest` - [(Dockerfile)](https://github.com/spritsail/drone-docker-build/blob/master/Dockerfile)
+
+## Configuration
+
+An example configuration of how the plugin should be configured:
+```yaml
+pipeline:
+  build:
+    image: spritsail/docker-build
+    volumes: [ '/var/run/docker.sock:/var/run/docker.sock' ]
+    repo: spritsail/docker-build
+    build_args:
+      - BUILD_ARG=value
+```
+
+### Available options
+- `repo`          tag to this repo/repo to push to. _required_
+- `path`          override working directory. _default: `.`_
+- `dockerfile`    override Dockerfile location. _default: `Dockerfile`_
+- `use_cache`     override to disable `--no-cache`. _default: `false`_
+- `no_labels`     disable automatic image labelling. _default: `false`_
+- `build_args`    additional build arguments. _optional_
+- `arguments`     optional extra arguments to pass to `docker build`. _optional_
