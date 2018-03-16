@@ -2,6 +2,12 @@ pipeline:
   build:
     image: spritsail/docker-build
     volumes: [ '/var/run/docker.sock:/var/run/docker.sock' ]
+    repo: build-dev
+
+  # Build again, this time with the newly 'just-built' image, as a test
+  test:
+    image: build-dev
+    volumes: [ '/var/run/docker.sock:/var/run/docker.sock' ]
     repo: spritsail/docker-build
 
   publish:
