@@ -1,13 +1,15 @@
 [hub]: https://hub.docker.com/r/spritsail/docker-build
 [git]: https://github.com/spritsail/drone-docker-build
+[drone]: https://drone.spritsail.io/spritsail/docker-build
+[mbdg]: https://microbadger.com/images/spritsail/docker-build
 
 # [spritsail/docker-build][hub]
-[![](https://images.microbadger.com/badges/image/spritsail/docker-build.svg)](https://microbadger.com/images/spritsail/docker-build)
-[![](https://images.microbadger.com/badges/version/spritsail/docker-build.svg)][hub]
-[![](https://images.microbadger.com/badges/commit/spritsail/docker-build.svg)][git]
+[![](https://images.microbadger.com/badges/image/spritsail/docker-build.svg)][mbdg]
+[![Latest Version](https://images.microbadger.com/badges/version/spritsail/docker-build.svg)][hub]
+[![Git Commit](https://images.microbadger.com/badges/commit/spritsail/docker-build.svg)][git]
 [![Docker Stars](https://img.shields.io/docker/stars/spritsail/docker-build.svg)][hub]
 [![Docker Pulls](https://img.shields.io/docker/pulls/spritsail/docker-build.svg)][hub]
-[![Build Status](https://drone.spritsail.io/api/badges/spritsail/drone-docker-build/status.svg)](https://drone.spritsail.io/spritsail/docker-build)
+[![Build Status](https://drone.spritsail.io/api/badges/spritsail/drone-docker-build/status.svg)][drone]
 
 A plugin for [Drone CI](https://github.com/drone/drone) to build and label Docker images with minimal effort
 
