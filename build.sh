@@ -53,7 +53,7 @@ if [ -z "$PLUGIN_NO_LABELS" ]; then
     ARGS="$ARGS --label org.label-schema.vcs-url=$VCS_URL"
     ARGS="$ARGS --label org.label-schema.vcs-branch=$VCS_BRANCH"
     ARGS="$ARGS --label org.label-schema.build-date=$BUILD_DATE"
-    ARGS="$ARGS --label org.label-schema.version=1.0"
+    ARGS="$ARGS --label org.label-schema.schema-version=1.0"
 fi
 
 >&2 echo "+ docker build $ARGS $PLUGIN_ARGUMENTS --tag=$PLUGIN_REPO ${PLUGIN_PATH:-.}"
