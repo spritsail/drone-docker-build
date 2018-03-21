@@ -10,9 +10,14 @@ error() { >&2 echo -e "${RED}Error: $@${RESET}"; exit 1; }
 # $PLUGIN_USE_CACHE     override to disable --no-cache
 # $PLUGIN_NO_LABELS     disable automatic image labelling
 # $PLUGIN_ARGUMENTS     optional extra arguments to pass to `docker build`
+# $PLUGIN_RM            a flag to immediately `docker rm` the built image
 
 if [ -z "$PLUGIN_REPO" ]; then
-    error "Missing 'repo' argument required for building"
+    if [ -n "$PLUGIN_RM" ]; then
+        PLUGIN_REPO="$DRONE_REPO_OWNER/$DRONE_REPO_NAME"
+    else
+        error "Missing 'repo' argument required for building"
+    fi
 fi
 
 # Always specify pull so images are pulled, and intermediate containers removed
@@ -58,8 +63,12 @@ fi
 
 >&2 echo "+ docker build $ARGS $PLUGIN_ARGUMENTS --tag=$PLUGIN_REPO ${PLUGIN_PATH:-.}"
 
-exec docker build \
+docker build \
     $ARGS \
     $PLUGIN_ARGUMENTS \
     --tag="$PLUGIN_REPO" \
     "${PLUGIN_PATH:-.}"
+
+if [ -n "$PLUGIN_RM" ]; then
+    docker image rm "$PLUGIN_REPO"
+fi
