@@ -4,7 +4,7 @@
 [mbdg]: https://microbadger.com/images/spritsail/docker-build
 
 # [spritsail/docker-build][hub]
-[![](https://images.microbadger.com/badges/image/spritsail/docker-build.svg)][mbdg]
+[![Layers](https://images.microbadger.com/badges/image/spritsail/docker-build.svg)][mbdg]
 [![Latest Version](https://images.microbadger.com/badges/version/spritsail/docker-build.svg)][hub]
 [![Git Commit](https://images.microbadger.com/badges/commit/spritsail/docker-build.svg)][git]
 [![Docker Stars](https://img.shields.io/docker/stars/spritsail/docker-build.svg)][hub]
@@ -25,7 +25,7 @@ pipeline:
   build:
     image: spritsail/docker-build
     volumes: [ '/var/run/docker.sock:/var/run/docker.sock' ]
-    repo: spritsail/docker-build
+    repo: user/image-name:optional-tag
     build_args:
       - BUILD_ARG=value
 ```
