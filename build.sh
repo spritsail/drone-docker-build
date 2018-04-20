@@ -45,8 +45,9 @@ EOA
 
 export VCS_REF="$DRONE_COMMIT_SHA"
 export VCS_URL="$DRONE_REPO_LINK"
-export VCS_BRANCH="$DRONE_REPO_BRANCH"
-export BUILD_DATE="$(date -Isec -d "@$DRONE_JOB_STARTED")"
+export VCS_BRANCH="$DRONE_COMMIT_BRANCH"
+[ -n "$DRONE_JOB_STARTED" ] && \
+    export BUILD_DATE="$(date -Isec -d "@$DRONE_JOB_STARTED")"
 
 ARGS="$ARGS --build-arg VCS_REF=$VCS_REF"
 ARGS="$ARGS --build-arg VCS_URL=$VCS_URL"
