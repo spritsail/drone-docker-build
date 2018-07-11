@@ -21,13 +21,13 @@ if [ -z "$PLUGIN_REPO" ]; then
 fi
 
 # Always specify pull so images are pulled, and intermediate containers removed
-ARGS="--pull --force-rm"
+ARGS="--pull\0--force-rm"
 
 # Override Dockerfile if specified
-[ -n "$PLUGIN_DOCKERFILE" ] && ARGS="$ARGS --file=$PLUGIN_DOCKERFILE"
+[ -n "$PLUGIN_DOCKERFILE" ] && ARGS="$ARGS\0--file=$PLUGIN_DOCKERFIE"
 
 # Specify --no-cache unless caching is requested
-[ "$PLUGIN_USE_CACHE" == "true" -o "$PLUGIN_USE_CACHE" == 1 ] || ARGS="$ARGS --no-cache"
+[ "$PLUGIN_USE_CACHE" == "true" -o "$PLUGIN_USE_CACHE" == 1 ] || ARGS="$ARGS\0--no-cache"
 
 while read -r arg; do
     # If arg is '%file: <filename>' then .parse and read file
@@ -37,7 +37,7 @@ while read -r arg; do
     if [ -n "${arg// }" ]; then
         # Only add arguments if they're not empty
         # this prevents the '"docker build" requires exactly 1 argument.' error
-        ARGS="$ARGS --build-arg $arg"
+        ARGS="$ARGS\0--build-arg\0${arg}"
     fi
 done << EOA
 $(echo "$PLUGIN_BUILD_ARGS" | tr ',' '\n')
@@ -49,26 +49,23 @@ export VCS_BRANCH="$DRONE_COMMIT_BRANCH"
 [ -n "$DRONE_JOB_STARTED" ] && \
     export BUILD_DATE="$(date -Isec -d "@$DRONE_JOB_STARTED")"
 
-ARGS="$ARGS --build-arg VCS_REF=$VCS_REF"
-ARGS="$ARGS --build-arg VCS_URL=$VCS_URL"
-ARGS="$ARGS --build-arg VCS_BRANCH=$VCS_BRANCH"
-ARGS="$ARGS --build-arg BUILD_DATE=$BUILD_DATE"
+ARGS="$ARGS\0--build-arg\0VCS_REF=$VCS_REF"
+ARGS="$ARGS\0--build-arg\0VCS_URL=$VCS_URL"
+ARGS="$ARGS\0--build-arg\0VCS_BRANCH=$VCS_BRANCH"
+ARGS="$ARGS\0--build-arg\0BUILD_DATE=$BUILD_DATE"
 
 if [ -z "$PLUGIN_NO_LABELS" ]; then
-    ARGS="$ARGS --label org.label-schema.vcs-ref=${VCS_REF:0:7}"
-    ARGS="$ARGS --label org.label-schema.vcs-url=$VCS_URL"
-    ARGS="$ARGS --label org.label-schema.vcs-branch=$VCS_BRANCH"
-    ARGS="$ARGS --label org.label-schema.build-date=$BUILD_DATE"
-    ARGS="$ARGS --label org.label-schema.schema-version=1.0"
+    ARGS="$ARGS\0--label\0org.label-schema.vcs-ref=${VCS_REF:0:7}"
+    ARGS="$ARGS\0--label\0org.label-schema.vcs-url=$VCS_URL"
+    ARGS="$ARGS\0--label\0org.label-schema.vcs-branch=$VCS_BRANCH"
+    ARGS="$ARGS\0--label\0org.label-schema.build-date=$BUILD_DATE"
+    ARGS="$ARGS\0--label\0org.label-schema.schema-version=1.0"
 fi
 
 >&2 echo "+ docker build $ARGS $PLUGIN_ARGUMENTS --tag=$PLUGIN_REPO ${PLUGIN_PATH:-.}"
 
-docker build \
-    $ARGS \
-    $PLUGIN_ARGUMENTS \
-    --tag="$PLUGIN_REPO" \
-    "${PLUGIN_PATH:-.}"
+# Un-escape the NULL characters to fix arguments with spaces in
+printf "$ARGS${PLUGIN_ARGUMENTS//,/\0}\0--tag=${PLUGIN_REPO}\0${PLUGIN_PATH:-.}" | xargs -0 docker build
 
 if [ -n "$PLUGIN_RM" ]; then
     docker image rm "$PLUGIN_REPO"
