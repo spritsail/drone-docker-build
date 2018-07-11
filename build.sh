@@ -62,7 +62,7 @@ if [ -z "$PLUGIN_NO_LABELS" ]; then
     ARGS="$ARGS\0--label\0org.label-schema.schema-version=1.0"
 fi
 
->&2 echo "+ docker build $ARGS $PLUGIN_ARGUMENTS --tag=$PLUGIN_REPO ${PLUGIN_PATH:-.}"
+>&2 echo "+ docker build ${ARGS//\\0/ } $PLUGIN_ARGUMENTS --tag=$PLUGIN_REPO ${PLUGIN_PATH:-.}"
 
 # Un-escape the NULL characters to fix arguments with spaces in
 printf "$ARGS${PLUGIN_ARGUMENTS//,/\0}\0--tag=${PLUGIN_REPO}\0${PLUGIN_PATH:-.}" | xargs -0 docker build
