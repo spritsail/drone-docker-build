@@ -1,6 +1,9 @@
 #!/bin/sh
 set -e
 
+# ANSI colour escape sequences
+RED='\033[0;31m'
+RESET='\033[0m'
 error() { >&2 echo -e "${RED}Error: $@${RESET}"; exit 1; }
 
 # $PLUGIN_REPO          tag to this repo/repo to push to
