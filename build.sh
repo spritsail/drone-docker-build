@@ -27,10 +27,10 @@ fi
 ARGS="--pull\0--force-rm"
 
 # Override Dockerfile if specified
-[ -n "$PLUGIN_DOCKERFILE" ] && ARGS="$ARGS\0--file=$PLUGIN_DOCKERFIE"
+[ -n "$PLUGIN_DOCKERFILE" ] && ARGS="$ARGS\0--file=$PLUGIN_DOCKERFILE"
 
 # Specify --no-cache unless caching is requested
-[ "$PLUGIN_USE_CACHE" == "true" -o "$PLUGIN_USE_CACHE" == 1 ] || ARGS="$ARGS\0--no-cache"
+[ -z "$PLUGIN_USE_CACHE" ] && ARGS="$ARGS\0--no-cache"
 
 while read -r arg; do
     # If arg is '%file: <filename>' then .parse and read file

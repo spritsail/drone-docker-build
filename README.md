@@ -38,3 +38,4 @@ pipeline:
 - `no_labels`     disable automatic image labelling. _default: `false`_
 - `build_args`    additional build arguments. _optional_
 - `arguments`     optional extra arguments to pass to `docker build`. _optional_
+- `rm`            a flag to immediately `docker rm` the built image. _optional_
