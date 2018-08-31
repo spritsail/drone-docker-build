@@ -14,6 +14,7 @@ error() { >&2 echo -e "${RED}Error: $@${RESET}"; exit 1; }
 # $PLUGIN_NO_LABELS     disable automatic image labelling
 # $PLUGIN_ARGUMENTS     optional extra arguments to pass to `docker build`
 # $PLUGIN_RM            a flag to immediately `docker rm` the built image
+# $PLUGIN_SQUASH        builds with --squash
 
 if [ -z "$PLUGIN_REPO" ]; then
     if [ -n "$PLUGIN_RM" ]; then
@@ -28,6 +29,9 @@ ARGS="--pull\0--force-rm"
 
 # Override Dockerfile if specified
 [ -n "$PLUGIN_DOCKERFILE" ] && ARGS="$ARGS\0--file=$PLUGIN_DOCKERFILE"
+
+# Squash image if requested
+[ -n "$PLUGIN_SQUASH" ] && ARGS="$ARGS\0--squash"
 
 # Specify --no-cache unless caching is requested
 [ -z "$PLUGIN_USE_CACHE" ] && ARGS="$ARGS\0--no-cache"

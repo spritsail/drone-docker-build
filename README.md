@@ -39,3 +39,4 @@ pipeline:
 - `build_args`    additional build arguments. _optional_
 - `arguments`     optional extra arguments to pass to `docker build`. _optional_
 - `rm`            a flag to immediately `docker rm` the built image. _optional_
+- `squash`        squash the built image into one layer. _optional_
