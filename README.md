@@ -38,5 +38,6 @@ pipeline:
 - `no_labels`     disable automatic image labelling. _default: `false`_
 - `build_args`    additional build arguments. _optional_
 - `arguments`     optional extra arguments to pass to `docker build`. _optional_
+- `make`          provides MAKEFLAGS=-j$(nproc) as a build-argument
 - `rm`            a flag to immediately `docker rm` the built image. _optional_
 - `squash`        squash the built image into one layer. _optional_
