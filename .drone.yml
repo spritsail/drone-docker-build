@@ -1,23 +1,57 @@
-pipeline:
-  build:
-    image: spritsail/docker-build
-    volumes: [ '/var/run/docker.sock:/var/run/docker.sock' ]
+---
+kind: pipeline
+name: default
+
+platform:
+  os: linux
+  arch: amd64
+
+steps:
+- name: build
+  pull: always
+  image: spritsail/docker-build
+  settings:
     repo: build-dev
 
   # Build again, this time with the newly 'just-built' image, as a test
-  test:
-    image: build-dev
-    volumes: [ '/var/run/docker.sock:/var/run/docker.sock' ]
+- name: test
+  pull: never
+  image: build-dev
+  settings:
     repo: spritsail/docker-build
 
-  publish:
-    image: spritsail/docker-publish
-    when: { branch: [ master ], event: [ push, tag, deployment ] }
-    volumes: [ '/var/run/docker.sock:/var/run/docker.sock' ]
-    secrets: [ docker_username, docker_password, microbadger_token ]
+- name: publish
+  pull: always
+  image: spritsail/docker-publish
+  settings:
     repo: spritsail/docker-build
+  environment:
+    DOCKER_PASSWORD:
+      from_secret: docker_password
+    DOCKER_USERNAME:
+      from_secret: docker_username
+  when:
+    branch:
+    - master
+    event:
+    - push
+    - tag
 
-  notify:
-    image: spritsail/notify
-    when: { status: [ success, failure ] }
-    secrets: [ webhook_url, notify_token ]
+- name: notify
+  pull: always
+  image: spritsail/notify
+  environment:
+    NOTIFY_TOKEN:
+      from_secret: notify_token
+    WEBHOOK_URL:
+      from_secret: webhook_url
+  when:
+    status:
+    - success
+    - failure
+
+---
+kind: signature
+hmac: 682132d9d9143fac633f3980087dce9bde4f16524c50d0bca2027aeb05ae7640
+
+...
