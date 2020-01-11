@@ -75,8 +75,11 @@ fi
 
 >&2 echo "+ docker build ${ARGS//\\0/ } $PLUGIN_ARGUMENTS --tag=$PLUGIN_REPO ${PLUGIN_PATH:-.}"
 
+# Set CWD to the same directory as is specified in PLUGIN_PATH
+cd ${PLUGIN_PATH:-.}
+
 # Un-escape the NULL characters to fix arguments with spaces in
-printf "$ARGS${PLUGIN_ARGUMENTS//,/\0}\0--tag=${PLUGIN_REPO}\0${PLUGIN_PATH:-.}" | xargs -0 docker build
+printf "$ARGS${PLUGIN_ARGUMENTS//,/\0}\0--tag=${PLUGIN_REPO}\0$PWD" | xargs -0 docker build
 
 if [ -n "$PLUGIN_RM" ]; then
     docker image rm "$PLUGIN_REPO"
