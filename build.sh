@@ -43,7 +43,9 @@ ARGS="--pull\0--force-rm"
 while read -r arg; do
     # If arg is '%file: <filename>' then .parse and read file
     if echo "$arg" | grep -q "%file\\s*:\\s*"; then
-        arg="${arg%%=*}=$(cat "$(echo ${arg#*:} | xargs)")"
+        value=$(cat "$(echo ${arg#*:} | xargs)")
+        name="$(basename "$(echo ${arg//*:} | xargs)" | tr a-z A-Z)"
+        arg="$name=$value"
     fi
     if [ -n "${arg// }" ]; then
         # Only add arguments if they're not empty
