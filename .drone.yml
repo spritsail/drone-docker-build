@@ -25,33 +25,18 @@ steps:
   image: spritsail/docker-publish
   settings:
     repo: spritsail/docker-build
-  environment:
-    DOCKER_PASSWORD:
-      from_secret: docker_password
-    DOCKER_USERNAME:
+    username:
       from_secret: docker_username
+    password:
+      from_secret: docker_password
   when:
     branch:
     - master
     event:
     - push
-    - tag
-
-- name: notify
-  pull: always
-  image: spritsail/notify
-  environment:
-    NOTIFY_TOKEN:
-      from_secret: notify_token
-    WEBHOOK_URL:
-      from_secret: webhook_url
-  when:
-    status:
-    - success
-    - failure
 
 ---
 kind: signature
-hmac: 682132d9d9143fac633f3980087dce9bde4f16524c50d0bca2027aeb05ae7640
+hmac: 08751e21c9d1116b8e3da54bffcfbe80edf3912e7749f3d7df92905baabafba0
 
 ...
