@@ -27,12 +27,13 @@ pipeline:
     volumes: [ '/var/run/docker.sock:/var/run/docker.sock' ]
     repo: user/image-name:optional-tag
     build_args:
-      - BUILD_ARG=value
+    - BUILD_ARG=value
 ```
 
 ### Available options
 - `repo`          tag to this repo/repo to push to. _required_
-- `path`          override working directory. _default: `.`_
+- `path`          specify the build directory (or URL). _default: `.`_
+- `cwd`           cd before calling docker build. _optional_
 - `dockerfile`    override Dockerfile location. _default: `Dockerfile`_
 - `use_cache`     override to disable `--no-cache`. _default: `false`_
 - `no_labels`     disable automatic image labelling. _default: `false`_

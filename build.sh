@@ -7,7 +7,8 @@ RESET='\033[0m'
 error() { >&2 echo -e "${RED}Error: $@${RESET}"; exit 1; }
 
 # $PLUGIN_REPO          tag to this repo/repo to push to
-# $PLUGIN_PATH          override working directory
+# $PLUGIN_PATH          specify the build directory (or URL)
+# $PLUGIN_CWD           cd before calling docker build
 # $PLUGIN_DOCKERFILE    override Dockerfile location
 # $PLUGIN_BUILD_ARGS    comma/space separated build arguments
 # $PLUGIN_USE_CACHE     override to disable --no-cache
@@ -77,11 +78,12 @@ fi
 
 >&2 echo "+ docker build ${ARGS//\\0/ } $PLUGIN_ARGUMENTS --tag=$PLUGIN_REPO ${PLUGIN_PATH:-.}"
 
-# Set CWD to the same directory as is specified in PLUGIN_PATH
-cd ${PLUGIN_PATH:-.}
+if [ -n "$PLUGIN_CWD" ]; then
+    cd "${PLUGIN_CWD}"
+fi
 
 # Un-escape the NULL characters to fix arguments with spaces in
-printf "$ARGS${PLUGIN_ARGUMENTS//,/\0}\0--tag=${PLUGIN_REPO}\0$PWD" | xargs -0 docker build
+printf "$ARGS${PLUGIN_ARGUMENTS//,/\0}\0--tag=${PLUGIN_REPO}\0${PLUGIN_PATH:-.}" | xargs -0 docker build
 
 if [ -n "$PLUGIN_RM" ]; then
     docker image rm "$PLUGIN_REPO"
