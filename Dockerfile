@@ -13,6 +13,9 @@ LABEL maintainer="Spritsail <docker-plugin@spritsail.io>" \
       io.spritsail.version.docker=${DOCKER_VER}
 
 ADD *.sh /usr/local/bin/
-RUN chmod 755 /usr/local/bin/*.sh
+RUN chmod 755 /usr/local/bin/*.sh && \
+    apk --no-cache add \
+        git
+
 
 ENTRYPOINT [ "/usr/local/bin/build.sh" ]
