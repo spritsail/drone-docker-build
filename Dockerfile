@@ -1,4 +1,4 @@
-ARG DOCKER_VER=20.10-rc
+ARG DOCKER_VER=20.10.1
 
 FROM docker:${DOCKER_VER}
 
@@ -16,6 +16,5 @@ ADD *.sh /usr/local/bin/
 RUN chmod 755 /usr/local/bin/*.sh && \
     apk --no-cache add \
         git
-
 
 ENTRYPOINT [ "/usr/local/bin/build.sh" ]
