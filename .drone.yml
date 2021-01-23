@@ -10,15 +10,11 @@ steps:
 - name: build
   pull: always
   image: spritsail/docker-build
-  settings:
-    repo: build-dev
 
   # Build again, this time with the newly 'just-built' image, as a test
 - name: test
   pull: never
-  image: build-dev
-  settings:
-    repo: spritsail/docker-build
+  image: ${DRONE_REPO_OWNER}/${DRONE_REPO_NAME}:${DRONE_STAGE_TOKEN}
 
 - name: publish
   pull: always
@@ -37,6 +33,6 @@ steps:
 
 ---
 kind: signature
-hmac: 08751e21c9d1116b8e3da54bffcfbe80edf3912e7749f3d7df92905baabafba0
+hmac: 396731229c00d147fb99cc9fda69c79928eef74fb48400a5d1070a60da5ec2e6
 
 ...
