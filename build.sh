@@ -21,6 +21,8 @@ error() { >&2 echo -e "${RED}Error: $@${RESET}"; exit 1; }
 if [ -z "$PLUGIN_REPO" ]; then
     if [ -n "$PLUGIN_RM" ]; then
         PLUGIN_REPO="$DRONE_REPO_OWNER/$DRONE_REPO_NAME"
+    elif [ -n "$DRONE_STAGE_TOKEN" ]; then
+        PLUGIN_REPO="$DRONE_REPO_OWNER/$DRONE_REPO_NAME:$DRONE_STAGE_TOKEN"
     else
         error "Missing 'repo' argument required for building"
     fi
