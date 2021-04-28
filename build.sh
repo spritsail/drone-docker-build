@@ -10,6 +10,7 @@ error() { >&2 echo -e "${RED}Error: $@${RESET}"; exit 1; }
 # $PLUGIN_PATH          specify the build directory (or URL)
 # $PLUGIN_CWD           cd before calling docker build
 # $PLUGIN_DOCKERFILE    override Dockerfile location
+# $PLUGIN_BUILDKIT      set false to disable BuildKit
 # $PLUGIN_BUILD_ARGS    comma/space separated build arguments
 # $PLUGIN_USE_CACHE     override to disable --no-cache
 # $PLUGIN_NO_LABELS     disable automatic image labelling
@@ -79,6 +80,11 @@ if [ -z "$PLUGIN_NO_LABELS" ]; then
     ARGS="$ARGS\0--label\0org.label-schema.vcs-branch=$VCS_BRANCH"
     ARGS="$ARGS\0--label\0org.label-schema.build-date=$BUILD_DATE"
     ARGS="$ARGS\0--label\0org.label-schema.schema-version=1.0"
+fi
+
+# Enable BuildKit unless explicitly disabled
+if [ "$PLUGIN_BUILDKIT" != "false" ]; then
+    export DOCKER_BUILDKIT=1
 fi
 
 >&2 echo "+ docker build ${ARGS//\\0/ } $PLUGIN_ARGUMENTS --tag=$PLUGIN_REPO ${PLUGIN_PATH:-.}"
