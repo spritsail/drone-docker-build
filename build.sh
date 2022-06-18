@@ -28,7 +28,11 @@ if [ -z "$PLUGIN_REPO" ]; then
     if [ -n "$PLUGIN_RM" ]; then
         PLUGIN_REPO="$DRONE_REPO"
     elif [ -n "$DRONE_BUILD_NUMBER" ]; then
-        PLUGIN_REPO="drone/$DRONE_REPO/$DRONE_BUILD_NUMBER:$DRONE_STAGE_OS-$DRONE_STAGE_ARCH"
+        if [ -n "$DOCKER_IMAGE_TOKEN" ]; then
+            PLUGIN_REPO="drone/$DRONE_REPO/$DRONE_BUILD_NUMBER/$DOCKER_IMAGE_TOKEN:$DRONE_STAGE_OS-$DRONE_STAGE_ARCH"
+        else
+            PLUGIN_REPO="drone/$DRONE_REPO/$DRONE_BUILD_NUMBER:$DRONE_STAGE_OS-$DRONE_STAGE_ARCH"
+        fi
     else
         error "Missing 'repo' argument required for building"
     fi
