@@ -1,10 +1,15 @@
 #!/bin/sh
+# vim: ft=sh et sw=4
 set -e
+
+if [ -n "$DEBUG$PLUGIN_DEBUG" ]; then
+    set -x
+fi
 
 # ANSI colour escape sequences
 RED='\033[0;31m'
 RESET='\033[0m'
-error() { >&2 echo -e "${RED}Error: $@${RESET}"; exit 1; }
+error() { >&2 printf "${RED}Error: %s${RESET}" "$@"; exit 1; }
 
 # $PLUGIN_REPO          tag to this repo/repo to push to
 # $PLUGIN_PATH          specify the build directory (or URL)
@@ -21,9 +26,9 @@ error() { >&2 echo -e "${RED}Error: $@${RESET}"; exit 1; }
 
 if [ -z "$PLUGIN_REPO" ]; then
     if [ -n "$PLUGIN_RM" ]; then
-        PLUGIN_REPO="$DRONE_REPO_OWNER/$DRONE_REPO_NAME"
-    elif [ -n "$DRONE_STAGE_TOKEN" ]; then
-        PLUGIN_REPO="$DRONE_REPO_OWNER/$DRONE_REPO_NAME:$DRONE_STAGE_TOKEN"
+        PLUGIN_REPO="$DRONE_REPO"
+    elif [ -n "$DRONE_BUILD_NUMBER" ]; then
+        PLUGIN_REPO="drone/$DRONE_REPO/$DRONE_BUILD_NUMBER:$DRONE_STAGE_OS-$DRONE_STAGE_ARCH"
     else
         error "Missing 'repo' argument required for building"
     fi
