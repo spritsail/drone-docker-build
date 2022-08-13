@@ -96,14 +96,14 @@ if [ "$PLUGIN_BUILDKIT" != "false" ]; then
     export DOCKER_BUILDKIT=1
 fi
 
->&2 echo "+ docker build ${ARGS//\\0/ } $PLUGIN_ARGUMENTS --tag=$PLUGIN_REPO ${PLUGIN_PATH:-.}"
+>&2 echo "+ docker build ${ARGS//\\0/ } $PLUGIN_ARGUMENTS --tag=$(echo $PLUGIN_REPO | awk '{print tolower($0)}') ${PLUGIN_PATH:-.}"
 
 if [ -n "$PLUGIN_CWD" ]; then
     cd "${PLUGIN_CWD}"
 fi
 
 # Un-escape the NULL characters to fix arguments with spaces in
-printf "$ARGS${PLUGIN_ARGUMENTS//,/\0}\0--tag=${PLUGIN_REPO}\0${PLUGIN_PATH:-.}" | xargs -0 docker build
+printf "$ARGS${PLUGIN_ARGUMENTS//,/\0}\0--tag=$(echo $PLUGIN_REPO | awk '{print tolower($0)}')\0${PLUGIN_PATH:-.}" | xargs -0 docker build
 
 if [ -n "$PLUGIN_RM" ]; then
     docker image rm "$PLUGIN_REPO"
