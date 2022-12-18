@@ -84,11 +84,10 @@ ARGS="$ARGS\0--build-arg\0VCS_BRANCH=$VCS_BRANCH"
 ARGS="$ARGS\0--build-arg\0BUILD_DATE=$BUILD_DATE"
 
 if [ -z "$PLUGIN_NO_LABELS" ]; then
-    ARGS="$ARGS\0--label\0org.label-schema.vcs-ref=${VCS_REF:0:7}"
-    ARGS="$ARGS\0--label\0org.label-schema.vcs-url=$VCS_URL"
-    ARGS="$ARGS\0--label\0org.label-schema.vcs-branch=$VCS_BRANCH"
-    ARGS="$ARGS\0--label\0org.label-schema.build-date=$BUILD_DATE"
-    ARGS="$ARGS\0--label\0org.label-schema.schema-version=1.0"
+    ARGS="$ARGS\0--label\0org.opencontainers.image.revision=${VCS_REF:0:7}"
+    ARGS="$ARGS\0--label\0org.opencontainers.image.source=$VCS_URL"
+    ARGS="$ARGS\0--label\0org.opencontainers.image.branch=$VCS_BRANCH"
+    ARGS="$ARGS\0--label\0org.opencontainers.image.created=$BUILD_DATE"
 fi
 
 # Enable BuildKit unless explicitly disabled
