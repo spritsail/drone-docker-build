@@ -1,4 +1,4 @@
-ARG DOCKER_VER=20.10.17
+ARG DOCKER_VER=23.0-rc-cli
 
 FROM docker:${DOCKER_VER}
 
