@@ -1,4 +1,4 @@
-ARG DOCKER_VER=23.0-rc-cli
+ARG DOCKER_VER=23-cli
 
 FROM docker:${DOCKER_VER}
 
