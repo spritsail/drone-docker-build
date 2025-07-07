@@ -11,9 +11,7 @@ LABEL org.opencontainers.image.authors="Spritsail <docker-plugin@spritsail.io>" 
       org.opencontainers.image.version=${VCS_REF} \
       io.spritsail.version.docker=${DOCKER_VER}
 
-ADD *.sh /usr/local/bin/
-RUN chmod 755 /usr/local/bin/*.sh && \
-    apk --no-cache add \
-        git
+ADD --chmod=755 *.sh /usr/local/bin/
+RUN apk --no-cache add git
 
 ENTRYPOINT [ "/usr/local/bin/build.sh" ]
