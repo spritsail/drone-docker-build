@@ -35,7 +35,6 @@ pipeline:
 - `path`          specify the build directory (or URL). _default: `.`_
 - `cwd`           cd before calling docker build. _optional_
 - `dockerfile`    override Dockerfile location. _default: `Dockerfile`_
-- `buildkit`      set false to disable buildkit. _default: `true`_
 - `use_cache`     override to disable `--no-cache`. _default: `false`_
 - `no_labels`     disable automatic image labelling. _default: `false`_
 - `build_args`    additional build arguments. _optional_
